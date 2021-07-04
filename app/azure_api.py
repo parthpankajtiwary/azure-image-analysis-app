@@ -5,7 +5,7 @@ from azure.cognitiveservices.vision.computervision.models import OperationStatus
 from azure.cognitiveservices.vision.computervision.models import VisualFeatureTypes
 from msrest.authentication import CognitiveServicesCredentials
 
-def get_ocr(read_image_url, subscription_key, endpoint):
+def get_ocr(filepath, subscription_key, endpoint):
     """[This function queries azure OCR API on an image to get OCR texts and location (rectangles)]
 
     Args:
@@ -19,8 +19,9 @@ def get_ocr(read_image_url, subscription_key, endpoint):
     computervision_client = ComputerVisionClient(endpoint, 
                                                 CognitiveServicesCredentials(subscription_key))
 
-    read_response = computervision_client.read(read_image_url,  raw=True)
+    # filepath = open(read_image_url, 'rb')
 
+    read_response = computervision_client.read_in_stream(filepath,  raw=True)
     read_operation_location = read_response.headers["Operation-Location"]
     operation_id = read_operation_location.split("/")[-1]
 
